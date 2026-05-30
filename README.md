@@ -1,8 +1,8 @@
 # ARTALE 隨機怪物扭蛋 🍁
 
-一個超簡單的純前端小網站：按一下按鈕，隨機抽出一隻《楓之谷 Artale》怪物，顯示牠的**中文名稱**與**圖片**。可直接發佈到 GitHub Pages。
+一個超簡單的純前端小網站：按一下按鈕，隨機抽出一隻《楓之谷 Artale》怪物，顯示牠的**中文名稱**與**圖片**。
 
-資料來源：[artalemaplestory.com](https://www.artalemaplestory.com)（約 357 隻怪物）。
+資料來源：[artalemaplestory.com](https://www.artalemaplestory.com)（約 350 隻怪物）。
 
 ---
 
@@ -21,9 +21,9 @@ artale-gacha/
 
 ---
 
-## 🚀 三步驟發佈
+## 🚀 發佈步驟
 
-### 1. 產生資料（在自己電腦跑一次）
+### 1. 產生資料
 
 ```bash
 pip install -r requirements.txt
@@ -33,9 +33,6 @@ python scrape.py            # 抓中文名 + 下載所有怪物圖到 icons/
 跑完會多出 `data/monsters.json` 和 `icons/` 整個資料夾。
 （想用英文名：`python scrape.py --lang en`）
 
-> 為什麼要下載圖？把圖放進自己的 repo，網站才不會依賴別人的伺服器、也不會因對方改網址而失效。
-> 若想偷懶不下載：`python scrape.py --no-images`，JSON 會改成指向線上圖片網址。
-
 ### 2. 本機預覽（可選）
 
 因為瀏覽器限制，直接雙擊 `index.html` 會讀不到 JSON。請用簡易伺服器預覽：
@@ -44,22 +41,6 @@ python scrape.py            # 抓中文名 + 下載所有怪物圖到 icons/
 python -m http.server 8000
 # 開瀏覽器到 http://localhost:8000
 ```
-
-### 3. 推上 GitHub 並開啟 Pages
-
-```bash
-git init
-git add .
-git commit -m "Artale 隨機怪物扭蛋"
-git branch -M main
-git remote add origin https://github.com/你的帳號/artale-gacha.git
-git push -u origin main
-```
-
-然後到 GitHub repo →「Settings」→「Pages」→ Source 選 `main` 分支、`/ (root)` 資料夾 → Save。
-等一兩分鐘，你的網站就會在 `https://你的帳號.github.io/artale-gacha/` 上線。
-
-最後記得把 `index.html` 最底下那行的 repo 連結改成你自己的網址。
 
 ---
 
@@ -74,7 +55,6 @@ git push -u origin main
 
 ## 🔧 客製化
 
-- **改外觀**：`index.html` 最上方 `:root` 裡的 CSS 變數（顏色、楓葉橘等）。
 - **只想要部分怪物**：編輯 `data/monsters.json`，留下你要的項目即可。
 - **加搜尋 / 篩選等級**：`monsters.json` 已含 `slug`，可自行擴充欄位。
 
