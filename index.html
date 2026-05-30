@@ -217,7 +217,7 @@
 
     <footer>
       資料來源：<a href="https://www.artalemaplestory.com" target="_blank" rel="noopener">artalemaplestory.com</a><br>
-      <a href="#" id="repo">GitHub 原始碼</a>　·　大地遊戲適用
+      <a href="#" id="repo">GitHub 原始碼</a>
     </footer>
   </div>
 
@@ -252,6 +252,31 @@ fetch("data/monsters.json")
 function init(){
   totalEl.textContent = MONSTERS.length;
   drawBtn.disabled = false;
+  preloadAll();
+}
+
+// 預載入所有怪物圖片到瀏覽器快取
+// （GitHub Pages 從 CDN 抓圖會有延遲，預載後轉蛋動畫才會流暢）
+const _preloadCache = [];
+function preloadAll(){
+  const total = MONSTERS.length;
+  if(!total) return;
+  let loaded = 0;
+  const updateStatus = () => {
+    if(!nameEl.classList.contains("placeholder")) return;
+    if(loaded >= total){
+      nameEl.textContent = "點下方按鈕，遭遇野生怪物";
+    } else {
+      nameEl.textContent = `準備中… ${loaded} / ${total}`;
+    }
+  };
+  updateStatus();
+  MONSTERS.forEach(m => {
+    const img = new Image();
+    _preloadCache.push(img);   // 保留 reference，避免 GC
+    img.onload = img.onerror = () => { loaded++; updateStatus(); };
+    img.src = m.img;
+  });
 }
 function pick(){ return MONSTERS[Math.floor(Math.random()*MONSTERS.length)]; }
 
@@ -313,7 +338,7 @@ function addHistory(m){
 drawBtn.addEventListener("click", roll);
 document.addEventListener("keydown", e => { if(e.code==="Space"){e.preventDefault(); roll();} });
 
-$("repo").href = "https://github.com/shu415design/artale-gatcha";
+$("repo").href = "https://github.com/shu415design/artale-gacha";
 </script>
 </body>
 </html>
