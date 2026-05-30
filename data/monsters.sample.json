@@ -1,0 +1,4 @@
+[
+  { "name": "蝸牛", "slug": "snail", "img": "icons/snail.gif" },
+  { "name": "藍蝸牛", "slug": "blue-snail", "img": "icons/blue-snail.gif" }
+]

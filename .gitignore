@@ -1,0 +1,21 @@
+# Python 虛擬環境（每台電腦結構不同，不該推上 repo）
+venv/
+env/
+.venv/
+
+# Python 編譯快取
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS 系統檔
+.DS_Store
+
+# Windows 系統檔
+Thumbs.db
+desktop.ini
+
+# 編輯器設定（個人偏好，不分享）
+.vscode/
+.idea/
+*.swp

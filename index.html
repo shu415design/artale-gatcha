@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARTALE 隨機怪物</title>
+<link rel="icon" href="icons/snail.gif" type="image/gif">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-1:#5ad6f7; --sky-2:#7ee8c4;
+    --sun:#ffd83a; --sun-d:#e8a800;
+    --pop:#ff6133; --pop-d:#c83a13;
+    --ink:#1a1f33;
+    --paper:#fffaf0; --paper-2:#fff3d6;
+    --tc:"Noto Sans TC","Microsoft JhengHei","PingFang TC","Heiti TC",sans-serif;
+    --en:"Lilita One",var(--tc);
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; min-height:100%;
+    font-family:var(--tc);
+    color:var(--ink);
+    background:
+      radial-gradient(ellipse 80% 60% at 50% -10%, #fff4b0 0%, transparent 50%),
+      linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 100%);
+    display:flex; flex-direction:column; align-items:center;
+    padding:24px 16px 50px; overflow-x:hidden; position:relative;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:repeating-conic-gradient(
+      from 0deg at 50% -20%,
+      rgba(255,255,255,.08) 0deg 4deg,
+      transparent 4deg 14deg
+    );
+  }
+  body::after{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0; opacity:.35;
+    background-image:
+      radial-gradient(closest-side, #fff 70%, transparent 72%) 10% 18%/120px 50px,
+      radial-gradient(closest-side, #fff 70%, transparent 72%) 85% 24%/160px 60px,
+      radial-gradient(closest-side, #fff 70%, transparent 72%) 70% 80%/140px 56px;
+    background-repeat:no-repeat;
+  }
+  .wrap{position:relative; z-index:1; width:100%; max-width:480px; text-align:center}
+
+  /* 簡單品牌標 - 直接膠囊樣式 */
+  .brand{
+    display:inline-block; padding:8px 22px;
+    background:var(--ink); color:var(--sun);
+    border-radius:999px; font-weight:900;
+    font-size:16px; letter-spacing:3px;
+    box-shadow:0 4px 0 rgba(0,0,0,.25);
+  }
+  .brand .en{ font-family:var(--en); letter-spacing:1px; margin-right:8px }
+
+  /* 遭遇卡片 */
+  .card{
+    margin:22px auto 14px;
+    background:var(--paper);
+    border:4px solid var(--ink);
+    border-radius:24px;
+    padding:18px 18px 22px;
+    box-shadow:0 10px 0 var(--ink), 0 16px 30px rgba(0,0,0,.25);
+    position:relative;
+  }
+  .badge{
+    position:absolute; top:-16px; left:50%; transform:translateX(-50%) rotate(-3deg);
+    background:var(--pop); color:#fff;
+    border:3px solid var(--ink); border-radius:999px;
+    padding:4px 18px; font-weight:900; font-size:14px; letter-spacing:4px;
+    box-shadow:0 4px 0 var(--ink);
+  }
+
+  .encounter{
+    position:relative; height:210px;
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 60%, #ffe9a8 0%, transparent 70%),
+      var(--paper-2);
+    border:3px solid var(--ink); border-radius:16px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .encounter::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:repeating-conic-gradient(
+      from 0deg at 50% 55%,
+      transparent 0deg 6deg,
+      rgba(26,31,51,.06) 6deg 8deg
+    );
+  }
+  .platform{
+    position:absolute; bottom:34px; width:130px; height:18px; border-radius:50%;
+    background:radial-gradient(closest-side, rgba(0,0,0,.35), transparent 75%);
+  }
+  .sprite{
+    image-rendering:pixelated; image-rendering:crisp-edges;
+    height:110px; width:auto; max-width:160px; object-fit:contain;
+    margin-bottom:14px; filter:drop-shadow(0 6px 4px rgba(0,0,0,.35));
+    position:relative; z-index:1;
+  }
+  .rolling .sprite{ animation:shake .12s infinite alternate ease-in-out; }
+  @keyframes shake{
+    from{transform:translate(-3px,-2px) rotate(-2deg)}
+    to{transform:translate(3px,1px) rotate(2deg)}
+  }
+  .pop{ animation:pop .55s cubic-bezier(.2,1.5,.4,1); }
+  @keyframes pop{
+    0%{transform:scale(.3) rotate(-15deg); opacity:0}
+    50%{transform:scale(1.2) rotate(5deg)}
+    75%{transform:scale(.95) rotate(-3deg)}
+    100%{transform:scale(1) rotate(0)}
+  }
+
+  /* 怪物名稱 - 純色 + 單層陰影，乾淨好讀 */
+  .name{
+    position:relative; z-index:1;
+    font-family:var(--tc); font-weight:900;
+    font-size:clamp(30px,8vw,38px); line-height:1.1;
+    color:var(--ink);
+    text-shadow:4px 4px 0 var(--sun);
+    letter-spacing:2px; min-height:1.3em;
+    padding:0 6px;
+  }
+  .name.placeholder{
+    text-shadow:none; font-weight:700; font-size:18px; opacity:.5;
+  }
+  .tagline{
+    margin-top:8px; font-weight:700; font-size:13px; letter-spacing:3px;
+    color:var(--ink); opacity:.55;
+  }
+
+  /* 大顆按鈕 - 純色字白底，無描邊 */
+  .btn{
+    margin-top:18px; width:100%; cursor:pointer;
+    font-family:var(--tc);
+    font-size:clamp(22px,6vw,26px); font-weight:900; color:#fff;
+    letter-spacing:8px; padding:18px 20px;
+    background:linear-gradient(180deg, #ff8c5a, var(--pop) 60%, var(--pop-d));
+    border:4px solid var(--ink); border-radius:999px;
+    box-shadow:0 8px 0 var(--ink), 0 14px 20px rgba(0,0,0,.25);
+    transition:transform .06s, box-shadow .06s;
+    text-shadow:0 3px 0 rgba(0,0,0,.25);
+  }
+  .btn:hover{ filter:brightness(1.05) }
+  .btn:active{
+    transform:translateY(6px);
+    box-shadow:0 2px 0 var(--ink), 0 5px 8px rgba(0,0,0,.25);
+  }
+  .btn:disabled{ filter:grayscale(.4) brightness(.85); cursor:wait }
+
+  .stats{
+    margin-top:14px; font-weight:700; font-size:14px; color:var(--ink); opacity:.85;
+  }
+  .stats b{
+    display:inline-block; padding:2px 12px; margin:0 2px;
+    background:var(--sun); border:2px solid var(--ink); border-radius:999px;
+    font-size:15px; font-weight:900;
+    box-shadow:0 2px 0 var(--ink);
+  }
+
+  /* 歷史紀錄 */
+  .history{ margin-top:28px }
+  .history h2{
+    display:inline-block; padding:5px 18px;
+    background:var(--ink); color:var(--paper);
+    border-radius:999px; font-size:13px; letter-spacing:4px; font-weight:700;
+    margin:0 0 14px;
+  }
+  .hrow{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; min-height:52px }
+  .hrow .h{
+    width:52px; height:52px; border-radius:14px; background:#fff;
+    display:flex; align-items:center; justify-content:center;
+    border:3px solid var(--ink); box-shadow:0 3px 0 var(--ink);
+    animation:pop .4s ease;
+  }
+  .hrow .h img{ height:32px; image-rendering:pixelated }
+
+  footer{ margin-top:30px; font-size:12px; font-weight:700; opacity:.7; line-height:1.7 }
+  footer a{ color:var(--ink); text-decoration:underline; text-decoration-thickness:2px }
+
+  .warn{
+    margin-top:14px; font-size:13px; font-weight:700; color:#7a3a00;
+    background:#fff3c4; border:3px solid var(--ink); border-radius:14px;
+    padding:10px 12px; display:none; box-shadow:0 4px 0 var(--ink);
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand"><span class="en">ARTALE</span>隨機怪物</div>
+    </header>
+
+    <div class="card">
+      <div class="badge">遭 遇</div>
+      <div class="encounter" id="screen">
+        <div class="platform"></div>
+        <img class="sprite" id="sprite" alt="" style="display:none">
+        <div class="name placeholder" id="name">點下方按鈕，遭遇野生怪物</div>
+      </div>
+      <div class="tagline">野生的怪物出沒中</div>
+      <button class="btn" id="draw">出　發</button>
+      <div class="stats">已遭遇 <b id="count">0</b> 次　共 <b id="total">…</b> 隻</div>
+    </div>
+
+    <div class="history">
+      <h2>最近遭遇</h2>
+      <div class="hrow" id="history"></div>
+    </div>
+
+    <div class="warn" id="warn"></div>
+
+    <footer>
+      資料來源：<a href="https://www.artalemaplestory.com" target="_blank" rel="noopener">artalemaplestory.com</a><br>
+      <a href="#" id="repo">GitHub 原始碼</a>　·　大地遊戲適用
+    </footer>
+  </div>
+
+<script>
+const FALLBACK = [
+  {name:"嫩寶", slug:"snail", img:"https://www.artalemaplestory.com/images/monsters/snail.gif"},
+  {name:"藍寶", slug:"blue-snail", img:"https://www.artalemaplestory.com/images/monsters/blue-snail.gif"},
+  {name:"紅寶", slug:"red-snail", img:"https://www.artalemaplestory.com/images/monsters/red-snail.gif"},
+  {name:"菇菇仔", slug:"shroom", img:"https://www.artalemaplestory.com/images/monsters/shroom.gif"},
+  {name:"木妖", slug:"stump", img:"https://www.artalemaplestory.com/images/monsters/stump.gif"},
+  {name:"綠水靈", slug:"slime", img:"https://www.artalemaplestory.com/images/monsters/slime.gif"},
+  {name:"肥肥", slug:"pig", img:"https://www.artalemaplestory.com/images/monsters/pig.gif"},
+  {name:"菇菇寶貝", slug:"orange-mushroom", img:"https://www.artalemaplestory.com/images/monsters/orange-mushroom.gif"}
+];
+
+let MONSTERS = [];
+const $ = id => document.getElementById(id);
+const sprite=$("sprite"), nameEl=$("name"), screen=$("screen"),
+      drawBtn=$("draw"), countEl=$("count"), totalEl=$("total"),
+      histEl=$("history"), warnEl=$("warn");
+let count=0, history=[], rolling=false;
+
+fetch("data/monsters.json")
+  .then(r => { if(!r.ok) throw 0; return r.json(); })
+  .then(d => { MONSTERS = d; init(); })
+  .catch(() => {
+    MONSTERS = FALLBACK; init();
+    warnEl.style.display="block";
+    warnEl.textContent="使用內建樣本（"+FALLBACK.length+" 隻）。執行 scrape.py 產生 data/monsters.json 後即為完整資料。";
+  });
+
+function init(){
+  totalEl.textContent = MONSTERS.length;
+  drawBtn.disabled = false;
+}
+function pick(){ return MONSTERS[Math.floor(Math.random()*MONSTERS.length)]; }
+
+function render(m, animate){
+  sprite.src = m.img;
+  sprite.style.display = "block";
+  sprite.onerror = () => { sprite.src = m.remote || m.img; };
+  nameEl.textContent = m.name;
+  nameEl.className = "name";
+  if(animate){
+    sprite.classList.remove("pop"); void sprite.offsetWidth; sprite.classList.add("pop");
+    nameEl.classList.remove("pop"); void nameEl.offsetWidth; nameEl.classList.add("pop");
+  }
+}
+
+let actx;
+function blip(freq){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    const o=actx.createOscillator(), g=actx.createGain();
+    o.type="square"; o.frequency.value=freq;
+    o.connect(g); g.connect(actx.destination);
+    g.gain.setValueAtTime(.05, actx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001, actx.currentTime+.12);
+    o.start(); o.stop(actx.currentTime+.12);
+  }catch(e){}
+}
+
+function roll(){
+  if(rolling || !MONSTERS.length) return;
+  rolling = true; drawBtn.disabled = true;
+  screen.classList.add("rolling");
+  let i=0, delay=55;
+  const final = pick();
+  (function step(){
+    render(pick(), false);
+    blip(420 + Math.random()*120);
+    i++; delay *= 1.16;
+    if(i < 16){ setTimeout(step, delay); }
+    else{
+      screen.classList.remove("rolling");
+      render(final, true);
+      blip(660); setTimeout(()=>blip(880), 80); setTimeout(()=>blip(1100), 160);
+      count++; countEl.textContent = count;
+      addHistory(final);
+      rolling = false; drawBtn.disabled = false;
+    }
+  })();
+}
+
+function addHistory(m){
+  history.unshift(m);
+  history = history.slice(0,8);
+  histEl.innerHTML = history.map(h =>
+    `<div class="h" title="${h.name}"><img src="${h.img}" alt="${h.name}"></div>`
+  ).join("");
+}
+
+drawBtn.addEventListener("click", roll);
+document.addEventListener("keydown", e => { if(e.code==="Space"){e.preventDefault(); roll();} });
+
+$("repo").href = "https://github.com/你的帳號/artale-gacha";
+</script>
+</body>
+</html>
