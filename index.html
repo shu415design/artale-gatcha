@@ -48,7 +48,6 @@
   }
   .wrap{position:relative; z-index:1; width:100%; max-width:480px; text-align:center}
 
-  /* 簡單品牌標 - 直接膠囊樣式 */
   .brand{
     display:inline-block; padding:8px 22px;
     background:var(--ink); color:var(--sun);
@@ -58,7 +57,6 @@
   }
   .brand .en{ font-family:var(--en); letter-spacing:1px; margin-right:8px }
 
-  /* 遭遇卡片 */
   .card{
     margin:22px auto 14px;
     background:var(--paper);
@@ -77,13 +75,14 @@
   }
 
   .encounter{
-    position:relative; height:210px;
+    position:relative; height:260px;
     background:
       radial-gradient(ellipse 70% 50% at 50% 60%, #ffe9a8 0%, transparent 70%),
       var(--paper-2);
     border:3px solid var(--ink); border-radius:16px;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     overflow:hidden;
+    padding-top:42px;
   }
   .encounter::before{
     content:""; position:absolute; inset:0; pointer-events:none;
@@ -93,6 +92,29 @@
       rgba(26,31,51,.06) 6deg 8deg
     );
   }
+
+  /* 地圖位置 chip - 浮在 encounter 上緣 */
+  .location{
+    position:absolute; top:14px; left:50%; transform:translateX(-50%);
+    background:var(--ink); color:var(--sun);
+    border-radius:999px;
+    padding:6px 18px 6px 16px;
+    font-weight:900; font-size:15px; letter-spacing:2px;
+    box-shadow:0 3px 0 rgba(0,0,0,.3);
+    white-space:nowrap; z-index:2;
+    max-width:90%; text-overflow:ellipsis; overflow:hidden;
+    transition:background .2s;
+  }
+  .location::before{
+    content:"📍 ";
+    font-size:14px;
+  }
+  .location.placeholder{
+    background:transparent; color:var(--ink); opacity:.4;
+    box-shadow:none; font-weight:700;
+  }
+  .location.placeholder::before{ content:"" }
+
   .platform{
     position:absolute; bottom:34px; width:130px; height:18px; border-radius:50%;
     background:radial-gradient(closest-side, rgba(0,0,0,.35), transparent 75%);
@@ -104,9 +126,14 @@
     position:relative; z-index:1;
   }
   .rolling .sprite{ animation:shake .12s infinite alternate ease-in-out; }
+  .rolling .location{ animation:wobble .15s infinite alternate ease-in-out; }
   @keyframes shake{
     from{transform:translate(-3px,-2px) rotate(-2deg)}
     to{transform:translate(3px,1px) rotate(2deg)}
+  }
+  @keyframes wobble{
+    from{transform:translateX(calc(-50% - 2px)) rotate(-1deg)}
+    to{transform:translateX(calc(-50% + 2px)) rotate(1deg)}
   }
   .pop{ animation:pop .55s cubic-bezier(.2,1.5,.4,1); }
   @keyframes pop{
@@ -115,26 +142,31 @@
     75%{transform:scale(.95) rotate(-3deg)}
     100%{transform:scale(1) rotate(0)}
   }
+  /* location 的 pop 動畫要保留 translateX(-50%) 不能被覆蓋 */
+  .location.pop{ animation:pop-loc .55s cubic-bezier(.2,1.5,.4,1); }
+  @keyframes pop-loc{
+    0%{transform:translateX(-50%) scale(.3); opacity:0}
+    50%{transform:translateX(-50%) scale(1.15)}
+    100%{transform:translateX(-50%) scale(1)}
+  }
 
-  /* 怪物名稱 - 純色 + 單層陰影，乾淨好讀 */
   .name{
     position:relative; z-index:1;
     font-family:var(--tc); font-weight:900;
-    font-size:clamp(30px,8vw,38px); line-height:1.1;
+    font-size:clamp(28px,7.5vw,34px); line-height:1.1;
     color:var(--ink);
     text-shadow:4px 4px 0 var(--sun);
     letter-spacing:2px; min-height:1.3em;
     padding:0 6px;
   }
   .name.placeholder{
-    text-shadow:none; font-weight:700; font-size:18px; opacity:.5;
+    text-shadow:none; font-weight:700; font-size:17px; opacity:.5;
   }
   .tagline{
     margin-top:8px; font-weight:700; font-size:13px; letter-spacing:3px;
     color:var(--ink); opacity:.55;
   }
 
-  /* 大顆按鈕 - 純色字白底，無描邊 */
   .btn{
     margin-top:18px; width:100%; cursor:pointer;
     font-family:var(--tc);
@@ -163,7 +195,6 @@
     box-shadow:0 2px 0 var(--ink);
   }
 
-  /* 歷史紀錄 */
   .history{ margin-top:28px }
   .history h2{
     display:inline-block; padding:5px 18px;
@@ -171,14 +202,17 @@
     border-radius:999px; font-size:13px; letter-spacing:4px; font-weight:700;
     margin:0 0 14px;
   }
-  .hrow{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; min-height:52px }
+  .hrow{ display:flex; gap:8px; flex-wrap:wrap; justify-content:center; min-height:62px }
   .hrow .h{
-    width:52px; height:52px; border-radius:14px; background:#fff;
-    display:flex; align-items:center; justify-content:center;
+    background:#fff; border-radius:14px;
+    padding:4px 10px 6px;
     border:3px solid var(--ink); box-shadow:0 3px 0 var(--ink);
     animation:pop .4s ease;
+    display:flex; flex-direction:column; align-items:center;
+    min-width:60px;
   }
-  .hrow .h img{ height:32px; image-rendering:pixelated }
+  .hrow .h img{ height:30px; image-rendering:pixelated }
+  .hrow .h .hloc{ font-size:10px; opacity:.6; letter-spacing:1px; margin-top:1px }
 
   footer{ margin-top:30px; font-size:12px; font-weight:700; opacity:.7; line-height:1.7 }
   footer a{ color:var(--ink); text-decoration:underline; text-decoration-thickness:2px }
@@ -199,13 +233,14 @@
     <div class="card">
       <div class="badge">遭 遇</div>
       <div class="encounter" id="screen">
+        <div class="location placeholder" id="location">點擊出發</div>
         <div class="platform"></div>
         <img class="sprite" id="sprite" alt="" style="display:none">
-        <div class="name placeholder" id="name">點下方按鈕，遭遇野生怪物</div>
+        <div class="name placeholder" id="name">在 ⟨村莊⟩ 遭遇 ⟨怪物⟩</div>
       </div>
       <div class="tagline">野生的怪物出沒中</div>
       <button class="btn" id="draw">出　發</button>
-      <div class="stats">已遭遇 <b id="count">0</b> 次　共 <b id="total">…</b> 隻</div>
+      <div class="stats">已遭遇 <b id="count">0</b> 次　共 <b id="total">…</b> 隻 × <b id="mtotal">…</b> 村</div>
     </div>
 
     <div class="history">
@@ -217,7 +252,7 @@
 
     <footer>
       資料來源：<a href="https://www.artalemaplestory.com" target="_blank" rel="noopener">artalemaplestory.com</a><br>
-      <a href="#" id="repo">GitHub 原始碼</a>
+      SleepingMan 製作
     </footer>
   </div>
 
@@ -225,38 +260,41 @@
 const FALLBACK = [
   {name:"嫩寶", slug:"snail", img:"https://www.artalemaplestory.com/images/monsters/snail.gif"},
   {name:"藍寶", slug:"blue-snail", img:"https://www.artalemaplestory.com/images/monsters/blue-snail.gif"},
-  {name:"紅寶", slug:"red-snail", img:"https://www.artalemaplestory.com/images/monsters/red-snail.gif"},
-  {name:"菇菇仔", slug:"shroom", img:"https://www.artalemaplestory.com/images/monsters/shroom.gif"},
-  {name:"木妖", slug:"stump", img:"https://www.artalemaplestory.com/images/monsters/stump.gif"},
-  {name:"綠水靈", slug:"slime", img:"https://www.artalemaplestory.com/images/monsters/slime.gif"},
-  {name:"肥肥", slug:"pig", img:"https://www.artalemaplestory.com/images/monsters/pig.gif"},
-  {name:"菇菇寶貝", slug:"orange-mushroom", img:"https://www.artalemaplestory.com/images/monsters/orange-mushroom.gif"}
+  {name:"菇菇寶貝", slug:"orange-mushroom", img:"https://www.artalemaplestory.com/images/monsters/orange-mushroom.gif"},
+  {name:"肥肥", slug:"pig", img:"https://www.artalemaplestory.com/images/monsters/pig.gif"}
+];
+const FALLBACK_MAPS = [
+  {name:"楓葉村", slug:"amherst"}, {name:"弓箭手村", slug:"henesys"},
+  {name:"墮落城市", slug:"kerning-city"}, {name:"勇士之村", slug:"perion"}
 ];
 
-let MONSTERS = [];
+let MONSTERS = [], MAPS = [];
 const $ = id => document.getElementById(id);
 const sprite=$("sprite"), nameEl=$("name"), screen=$("screen"),
-      drawBtn=$("draw"), countEl=$("count"), totalEl=$("total"),
+      locEl=$("location"),
+      drawBtn=$("draw"), countEl=$("count"), totalEl=$("total"), mtotalEl=$("mtotal"),
       histEl=$("history"), warnEl=$("warn");
 let count=0, history=[], rolling=false;
 
-fetch("data/monsters.json")
-  .then(r => { if(!r.ok) throw 0; return r.json(); })
-  .then(d => { MONSTERS = d; init(); })
-  .catch(() => {
-    MONSTERS = FALLBACK; init();
-    warnEl.style.display="block";
-    warnEl.textContent="使用內建樣本（"+FALLBACK.length+" 隻）。執行 scrape.py 產生 data/monsters.json 後即為完整資料。";
-  });
+// 同時載入怪物 + 地圖
+Promise.all([
+  fetch("data/monsters.json").then(r => r.ok ? r.json() : Promise.reject()),
+  fetch("data/maps.json").then(r => r.ok ? r.json() : Promise.reject()),
+]).then(([m, p]) => {
+  MONSTERS = m; MAPS = p; init();
+}).catch(() => {
+  MONSTERS = FALLBACK; MAPS = FALLBACK_MAPS; init();
+  warnEl.style.display="block";
+  warnEl.textContent="使用內建樣本。請執行 scrape.py 或補上 data/maps.json。";
+});
 
 function init(){
   totalEl.textContent = MONSTERS.length;
+  mtotalEl.textContent = MAPS.length;
   drawBtn.disabled = false;
   preloadAll();
 }
 
-// 預載入所有怪物圖片到瀏覽器快取
-// （GitHub Pages 從 CDN 抓圖會有延遲，預載後轉蛋動畫才會流暢）
 const _preloadCache = [];
 function preloadAll(){
   const total = MONSTERS.length;
@@ -265,7 +303,7 @@ function preloadAll(){
   const updateStatus = () => {
     if(!nameEl.classList.contains("placeholder")) return;
     if(loaded >= total){
-      nameEl.textContent = "點下方按鈕，遭遇野生怪物";
+      nameEl.textContent = "在 ⟨村莊⟩ 遭遇 ⟨怪物⟩";
     } else {
       nameEl.textContent = `準備中… ${loaded} / ${total}`;
     }
@@ -273,22 +311,27 @@ function preloadAll(){
   updateStatus();
   MONSTERS.forEach(m => {
     const img = new Image();
-    _preloadCache.push(img);   // 保留 reference，避免 GC
+    _preloadCache.push(img);
     img.onload = img.onerror = () => { loaded++; updateStatus(); };
     img.src = m.img;
   });
 }
-function pick(){ return MONSTERS[Math.floor(Math.random()*MONSTERS.length)]; }
 
-function render(m, animate){
-  sprite.src = m.img;
+function pickMon(){ return MONSTERS[Math.floor(Math.random()*MONSTERS.length)]; }
+function pickMap(){ return MAPS[Math.floor(Math.random()*MAPS.length)]; }
+
+function render(mon, map, animate){
+  sprite.src = mon.img;
   sprite.style.display = "block";
-  sprite.onerror = () => { sprite.src = m.remote || m.img; };
-  nameEl.textContent = m.name;
+  sprite.onerror = () => { sprite.src = mon.remote || mon.img; };
+  nameEl.textContent = mon.name;
   nameEl.className = "name";
+  locEl.textContent = map.name;
+  locEl.className = "location";
   if(animate){
     sprite.classList.remove("pop"); void sprite.offsetWidth; sprite.classList.add("pop");
     nameEl.classList.remove("pop"); void nameEl.offsetWidth; nameEl.classList.add("pop");
+    locEl.classList.remove("pop"); void locEl.offsetWidth; locEl.classList.add("pop");
   }
 }
 
@@ -306,39 +349,42 @@ function blip(freq){
 }
 
 function roll(){
-  if(rolling || !MONSTERS.length) return;
+  if(rolling || !MONSTERS.length || !MAPS.length) return;
   rolling = true; drawBtn.disabled = true;
   screen.classList.add("rolling");
   let i=0, delay=55;
-  const final = pick();
+  const finalMon = pickMon();
+  const finalMap = pickMap();
   (function step(){
-    render(pick(), false);
+    render(pickMon(), pickMap(), false);
     blip(420 + Math.random()*120);
     i++; delay *= 1.16;
     if(i < 16){ setTimeout(step, delay); }
     else{
       screen.classList.remove("rolling");
-      render(final, true);
+      render(finalMon, finalMap, true);
       blip(660); setTimeout(()=>blip(880), 80); setTimeout(()=>blip(1100), 160);
       count++; countEl.textContent = count;
-      addHistory(final);
+      addHistory(finalMon, finalMap);
       rolling = false; drawBtn.disabled = false;
     }
   })();
 }
 
-function addHistory(m){
-  history.unshift(m);
+function addHistory(mon, map){
+  history.unshift({mon, map});
   history = history.slice(0,8);
   histEl.innerHTML = history.map(h =>
-    `<div class="h" title="${h.name}"><img src="${h.img}" alt="${h.name}"></div>`
+    `<div class="h" title="${h.map.name} - ${h.mon.name}">
+       <img src="${h.mon.img}" alt="${h.mon.name}">
+       <div class="hloc">${h.map.name}</div>
+     </div>`
   ).join("");
 }
 
 drawBtn.addEventListener("click", roll);
 document.addEventListener("keydown", e => { if(e.code==="Space"){e.preventDefault(); roll();} });
 
-$("repo").href = "https://github.com/shu415design/artale-gacha";
 </script>
 </body>
 </html>

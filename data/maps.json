@@ -1,0 +1,117 @@
+[
+  {
+    "name": "童話村",
+    "name_en": "Korean Folk Town",
+    "slug": "korean-folk-town"
+  },
+  {
+    "name": "冰原雪域",
+    "name_en": "El Nath",
+    "slug": "el-nath"
+  },
+  {
+    "name": "勇士之村",
+    "name_en": "Perion",
+    "slug": "perion"
+  },
+  {
+    "name": "古代神社",
+    "name_en": "Mushroom Shrine",
+    "slug": "mushroom-shrine"
+  },
+  {
+    "name": "台北101",
+    "name_en": "Taipei 101",
+    "slug": "taipei-101"
+  },
+  {
+    "name": "地球防衛本部",
+    "name_en": "Omega Sector",
+    "slug": "omega-sector"
+  },
+  {
+    "name": "墮落城市",
+    "name_en": "Kerning City",
+    "slug": "kerning-city"
+  },
+  {
+    "name": "天空之城",
+    "name_en": "Orbis",
+    "slug": "orbis"
+  },
+  {
+    "name": "奇幻村",
+    "name_en": "Sleepywood",
+    "slug": "sleepywood"
+  },
+  {
+    "name": "弓箭手村",
+    "name_en": "Henesys",
+    "slug": "henesys"
+  },
+  {
+    "name": "桃花仙境",
+    "name_en": "Mu Lung",
+    "slug": "mu-lung"
+  },
+  {
+    "name": "楓葉村",
+    "name_en": "Amherst",
+    "slug": "amherst"
+  },
+  {
+    "name": "水上市場",
+    "name_en": "Floating Market",
+    "slug": "floating-market"
+  },
+  {
+    "name": "玩具城",
+    "name_en": "Ludibrium",
+    "slug": "ludibrium"
+  },
+  {
+    "name": "瑪迦提亞城",
+    "name_en": "Magatia",
+    "slug": "magatia"
+  },
+  {
+    "name": "神木村",
+    "name_en": "Leafre",
+    "slug": "leafre"
+  },
+  {
+    "name": "納希綠洲城",
+    "name_en": "Ariant",
+    "slug": "ariant"
+  },
+  {
+    "name": "維多利亞港",
+    "name_en": "Lith Harbor",
+    "slug": "lith-harbor"
+  },
+  {
+    "name": "西門町",
+    "name_en": "Ximending",
+    "slug": "ximending"
+  },
+  {
+    "name": "靈藥幻境",
+    "name_en": "Herb Town",
+    "slug": "herb-town"
+  },
+  {
+    "name": "魔法森林",
+    "name_en": "Ellinia",
+    "slug": "ellinia"
+  },
+  {
+    "name": "鯨魚號",
+    "name_en": "Nautilus",
+    "slug": "nautilus"
+  },
+  {
+    "name": "黃金海岸",
+    "name_en": "Florina Beach",
+    "slug": "florina-beach"
+  }
+]
